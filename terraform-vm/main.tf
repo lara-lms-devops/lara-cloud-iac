@@ -114,9 +114,10 @@ resource "libvirt_domain" "lara_storage_vm" {
     cloudinit = libvirt_cloudinit_disk.nginx_cloudinit.id # ONLY FOR TESTING
 
     network_interface {
-       network_id = libvirt_network.lara_network.id
-       addresses = [ "10.0.2.16" ] # TODO move this to the variable file
-       hostname = "lara-storage-host" # TODO move to the variable file and see if it is possible to put in a block all configs
+        network_id = libvirt_network.lara_network.id
+        addresses = [ "10.0.2.16" ] # TODO move this to the variable file
+        hostname = "lara-storage-host" # TODO move to the variable file and see if it is possible to put in a block all configs
+        mac = "AA:BB:CC:11:22:22"
     }
 
     disk {
@@ -143,9 +144,10 @@ resource "libvirt_domain" "lara_k3s_vm" {
     cloudinit = libvirt_cloudinit_disk.nginx_cloudinit.id # ONLY FOR TESTING
 
     network_interface {
-       network_id = libvirt_network.lara_network.id
-       addresses = [ "10.0.2.17" ] # TODO move this to the variable file
-       hostname = "lara-k3s-host" # TODO move to the variable file and see if it is possible to put in a block all configs
+        network_id = libvirt_network.lara_network.id
+        addresses = [ "10.0.2.17" ] # TODO move this to the variable file
+        hostname = "lara-k3s-host" # TODO move to the variable file and see if it is possible to put in a block all configs
+        mac = "AA:BB:CC:11:22:23"
     }
 
     disk {
