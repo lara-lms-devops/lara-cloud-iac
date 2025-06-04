@@ -63,8 +63,9 @@ resource "libvirt_volume" "lara_k3s_os_volume" {
 resource "libvirt_network" "lara_network" { # TODO check if I need to add a bridge to the ubuntu and add it through command line and yaml file (Netplan)
     name = "lara_network"
     mode = "bridge"
-    domain = "lara.local"
+    # domain = "lara.local" # Not used in bridge mode
     autostart = true
+    bridge = "br0"
     # TODO understand more about networks
     # https://wiki.libvirt.org/VirtualNetworking.html
     # study ethernet bridge
@@ -163,6 +164,9 @@ resource "libvirt_domain" "lara_k3s_vm" {
 # [] Create cloud init that installs and configure MySQL
 # [] Add some type of identity provider to only allow the K3S deploy for allowed users
 # [] Understand why a bunch of files where created in the user's path
+
+# TODOS top priority
+# [] Understand why the VM don't have ID and the bridge break the ssh for me
 
 # Resources
 # https://docs.cloud-init.io/en/latest/tutorial/qemu.html#tutorial-qemu
