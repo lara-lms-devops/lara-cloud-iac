@@ -11,26 +11,35 @@ provider "libvirt" {
     uri = "qemu:///system"
 }
 
-resource "libvirt_volume" "ubntu_base_volume" {
-    name = "ubuntu.${var.image_format}"
-    pool = "default"
-    source = var.image_source
-    format = var.image_format
-}
+# resource "libvirt_volume" "ubntu_base_volume" {
+#     name = "ubuntu.${var.image_format}"
+#     pool = "default"
+#     source = var.image_source
+#     format = var.image_format
+# }
 
-resource "libvirt_volume" "lara_storage_os_volume" {
+resource "libvirt_volume" "lara_storage_volume" {
     name = "lara-storage-os-volume.${var.image_format}"
     pool = "default"
     source = var.image_source
     format = var.image_format
+    size = 20 * 1024 * 1024 * 1024
 }
 
-resource "libvirt_volume" "lara_storage_disk" {
-    name = "lara-storage-volume.raw"
+resource "libvirt_volume" "lara_k3s_volume" {
+    name = "lara-storage-os-volume.${var.image_format}"
     pool = "default"
-    format = "raw"
-    size   = 10737418240  # 10 GB in bytes
-} # TODO attach the disk inside the VM using clound init
+    source = var.image_source
+    format = var.image_format
+    size = 20 * 1024 * 1024 * 1024
+}
+
+# resource "libvirt_volume" "lara_storage_disk" {
+#     name = "lara-storage-volume.raw"
+#     pool = "default"
+#     format = "raw"
+#     size   = 10737418240  # 10 GB in bytes
+# } # TODO attach the disk inside the VM using clound init
 
 # TODO shell commands that chat gpt displayed to attach the disks
 # # List new disk (likely /dev/vdb if it's the 2nd disk)
@@ -46,12 +55,12 @@ resource "libvirt_volume" "lara_storage_disk" {
 # # Make it permanent
 # echo '/dev/vdb /mnt/storage ext4 defaults 0 0' | sudo tee -a /etc/fstab
 
-resource "libvirt_volume" "lara_k3s_os_volume" {
-    name = "lara-k3s-os-volume.${var.image_format}"
-    pool = "default"
-    source = var.image_source
-    format = var.image_format
-}
+# resource "libvirt_volume" "lara_k3s_os_volume" {
+#     name = "lara-k3s-os-volume.${var.image_format}"
+#     pool = "default"
+#     source = var.image_source
+#     format = var.image_format
+# }
 
 # resource "libvirt_volume" "kernel" {
 #     name = "kernel"
@@ -121,11 +130,7 @@ resource "libvirt_domain" "lara_storage_vm" {
     }
 
     disk {
-        volume_id = libvirt_volume.lara_storage_os_volume.id
-    }
-
-    disk {
-        volume_id = libvirt_volume.lara_storage_disk.id
+        volume_id = libvirt_volume.lara_storage_volume.id
     }
 
     # SHOULD BE REMOVE WHEN RUNNING IN BARE METAL, THIS IS ONLY USED TO ALLOW THE CREATION OF VM IN VIRTUAL BOX GUEST
@@ -151,7 +156,7 @@ resource "libvirt_domain" "lara_k3s_vm" {
     }
 
     disk {
-        volume_id = libvirt_volume.lara_k3s_os_volume.id
+        volume_id = libvirt_volume.lara_k3s_volume.id
     }
 
     # SHOULD BE REMOVE WHEN RUNNING IN BARE METAL, THIS IS ONLY USED TO ALLOW THE CREATION OF VM IN VIRTUAL BOX GUEST
@@ -168,7 +173,11 @@ resource "libvirt_domain" "lara_k3s_vm" {
 # [] Understand why a bunch of files where created in the user's path
 
 # TODOS top priority
-# [] Understand why the VM don't have ID and the bridge break the ssh for me
+# [X] Understand why the VM don't have IP and the bridge break the ssh for me
+# A. It was missing the mac address in the domain's network_interface block and some time for the VM truly start
+# [X] Understand why nginx is failing in the VM
+# A. It is working now and I don't know why
+
 
 # Resources
 # https://docs.cloud-init.io/en/latest/tutorial/qemu.html#tutorial-qemu
