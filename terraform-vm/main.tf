@@ -19,19 +19,17 @@ provider "libvirt" {
 # }
 
 resource "libvirt_volume" "lara_storage_volume" {
-    name = "lara-storage-os-volume.${var.image_format}"
+    name = "lara-storage-volume.${var.image_format}"
     pool = "default"
     source = var.image_source
     format = var.image_format
-    size = 20 * 1024 * 1024 * 1024
 }
 
 resource "libvirt_volume" "lara_k3s_volume" {
-    name = "lara-storage-os-volume.${var.image_format}"
+    name = "lara-k3s-volume.${var.image_format}"
     pool = "default"
     source = var.image_source
     format = var.image_format
-    size = 20 * 1024 * 1024 * 1024
 }
 
 # resource "libvirt_volume" "lara_storage_disk" {

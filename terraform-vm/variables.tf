@@ -1,6 +1,6 @@
 variable "image_source" {
     description = "The Ubuntu Noble LTS Cloud Image stored in the host directory"
-    default = "../noble-server-cloudimg-amd64.img"
+    default = "../noble-server-cloudimg-amd64-20G.img"
     type = string
 }
 
