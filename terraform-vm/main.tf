@@ -175,6 +175,7 @@ resource "libvirt_domain" "lara_k3s_vm" {
 # A. It was missing the mac address in the domain's network_interface block and some time for the VM truly start
 # [X] Understand why nginx is failing in the VM
 # A. It is working now and I don't know why
+# [] Make sure the ip in the vms are static, it just switched the ips
 
 
 # Resources

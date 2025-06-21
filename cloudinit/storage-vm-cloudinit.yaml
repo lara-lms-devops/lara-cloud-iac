@@ -1,0 +1,23 @@
+#cloud-config
+users:
+  - name: ubuntu
+    ssh-authorized-keys:
+      -  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDpk4z9FRgE8Hfos98yihMoQLm262AD7FHXLQVJx8DK99iLRs1DUAvOtBsrtqHnbEK8NJqgzqnFLU5hEz3QjkqC3X7yK94VqSdixZsoJU3mQlmycmL4eo3oCT+brmRMW8UW7i+gdJETWmXX7KIMA/WtCh+6WUj+2vCrRk2rAIkFubLNLMTlps0wk+6NS0WuTbRg2CC8WAaSu5bOmS4cKhR9nrwBUIbNhMtxWrWh53p563D/FsUp+LiRyDWOiKEfm/xu+jXpo7Zm8QbpZ40645XGwjLPn0Fyx4EhzRNdVB7VyHBD95/LU93hHE6gI3WbCw+Y5xRZfg9i4ytYY1Sr5bvVlBGH88bdGPYFYsrXIrey1KVBBt6NG8LoAhzaKQG5QtOR0t/Y6WkdLhU5qxD9wgDVGAsi2CYmgronrtmeQbcSZQZErl2P8Wbv9XXYqu1RqC4cLhMbCHLErhJ8QtSDYkYat5ArQ2wnRjgJxnhd/g0w5TPhERion/7+avO6tUDoFQn5ld6+vgB6tFShTUlV/3nJUjI9+8pVQzv1wefgzbVaTInA4cApY2wBI8X5iH4DN1WwmvACyj7uBaXfMDE5hR/m0dg0Fz4YnmLIhSVPpJBDFEdy1/rIGg9Csfu9Tb2DcqNjLzdVROZNfkpWn1f+sYq2bR/4kySE5CgwJa8JpWLt8w== lara@main-server
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: sudo
+    shell: /bin/bash
+package_update: true
+package_upgrade: false
+packages:
+  - qemu-guest-agent
+  - mysql-server
+runcmd:
+  - sudo systemctl enable qemu-guest-agent
+  - sudo systemctl start qemu-guest-agent
+  - sudo systemctl enable mysql.service
+  - sudo systemctl start mysql.service
+  # - sudo mysql -e 'ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY "password";' # TODO upate this password
+
+# TODO check if it is possible to assigne parameters to the cloud init
+# TODO add firewall that blocks requests from any source except server and k3s vm
+# TODO add the security configuration
