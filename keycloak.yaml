@@ -116,17 +116,17 @@ spec:
           - name: KEYCLOAK_ADMIN
             valueFrom:
               secretKeyRef:
-                name: keycloak-secret
+                name: keycloak-secrets
                 key: KEYCLOAK_ADMIN
           - name: KEYCLOAK_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: keycloak-secret
+                name: keycloak-secrets
                 key: KEYCLOAK_ADMIN_PASSWORD
           - name: KC_DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: keycloak-secret
+                name: keycloak-secrets
                 key: KC_DB_PASSWORD
           - name: KC_DB
             value: keycloak-database
