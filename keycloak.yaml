@@ -111,10 +111,10 @@ spec:
         args: ["start-dev"]
         resources:
           limits:
-            memory: "256Mi"
+            memory: "1024Mi"
             cpu: "0.5"
           requests:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "0.2"
         env:
           - name: KEYCLOAK_ADMIN
@@ -150,12 +150,12 @@ spec:
         #     port: 8080
         #   initialDelaySeconds: 20
         #   periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health/live
+        #     port: 8080
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
