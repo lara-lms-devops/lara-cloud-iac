@@ -37,10 +37,10 @@ spec:
           image: bitnami/postgresql:16
           resources:
             limits:
-              memory: "128Mi"
+              memory: "256Mi"
               cpu: "0.5"
             requests:
-              memory: "256Mi"
+              memory: "128Mi"
               cpu: "0.2"
           ports:
             - containerPort: 5432
@@ -54,10 +54,13 @@ spec:
               value: keycloak-user
             - name: POSTGRESQL_DATABASE
               value: keycloak-database
-          volumes:
+          volumeMounts:
             - name: keycloak-postgres-storage
-              persintentVolumeClaim:
-                claimName: keycloak-postgres-pvc
+              mountPath: /bitnami/postgresql
+      volumes:
+        - name: keycloak-postgres-storage
+          persintentVolumeClaim:
+            claimName: keycloak-postgres-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -104,10 +107,10 @@ spec:
         args: ["start-dev"]
         resources:
           limits:
-            memory: "128Mi"
+            memory: "256Mi"
             cpu: "0.5"
           requests:
-            memory: "256Mi"
+            memory: "128Mi"
             cpu: "0.2"
         env:
           - name: KEYCLOAK_ADMIN
