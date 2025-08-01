@@ -16,7 +16,7 @@ metadata:
   name: keycloak-postgres-secret
 type: Opaque
 stringData:
-  POSTGRES_PASSWORD: secret
+  POSTGRESQL_PASSWORD: secret
 ---
 apiVersion: apps/v1
 kind: Deployment
