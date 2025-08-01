@@ -180,7 +180,7 @@ spec:
     - http:
         paths:
         - pathType: Prefix
-          path: "/keycloak"
+          path: "/"
           backend:
             service:
               name: keycloak
