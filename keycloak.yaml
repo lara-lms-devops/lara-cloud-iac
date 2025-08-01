@@ -59,7 +59,7 @@ spec:
               mountPath: /bitnami/postgresql
       volumes:
         - name: keycloak-postgres-storage
-          persintentVolumeClaim:
+          persistentVolumeClaim:
             claimName: keycloak-postgres-pvc
 ---
 apiVersion: v1
@@ -169,15 +169,15 @@ metadata:
     app.kubernetes.io/name: keycloak
 spec:
   rules:
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/keycloak"
-        backend:
-          service:
-            name: keycloak
-            port: 
-              number: 8080
+    - http:
+        paths:
+        - pathType: Prefix
+          path: "/keycloak"
+          backend:
+            service:
+              name: keycloak
+              port:
+                number: 8080
 
         
         
