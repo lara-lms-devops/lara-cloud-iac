@@ -48,7 +48,7 @@ spec:
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: keycloak-postgres-secret
                   key: POSTGRESQL_PASSWORD
             - name: POSTGRESQL_USERNAME
               value: keycloak-user
