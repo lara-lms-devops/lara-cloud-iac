@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: keycloak-postgres-pvc
+spec:
+  resources:
+    requests:
+      storage: 8Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-postgres-secret
+type: Opaque
+stringData:
+  POSTGRES_PASSWORD: secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-postgres
+  template:
+    metadata:
+      labels:
+        app: keycloak-postgres
+    spec:
+      containers:
+        - name: keycloak-postgres
+          image: bitnami/postgresql:16
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "0.5"
+            requests:
+              memory: "256Mi"
+              cpu: "0.2"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRESQL_USERNAME
+              value: keycloak-user
+            - name: POSTGRESQL_DATABASE
+              value: keycloak-database
+          volumes:
+            - name: keycloak-postgres-storage
+              persintentVolumeClaim:
+                claimName: keycloak-postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-postgres
+spec:
+  type: ClusterIP
+  selector:
+    app: keycloak-postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+
+
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-secrets
+type: Opaque
+stringData:
+  KEYCLOAK_ADMIN: admin
+  KEYCLOAK_ADMIN_PASSWORD: admin
+  KC_DB_PASSWORD: secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:24.0.4
+        args: ["start-dev"]
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "0.5"
+          requests:
+            memory: "256Mi"
+            cpu: "0.2"
+        env:
+          - name: KEYCLOAK_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-secret
+                key: KEYCLOAK_ADMIN
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-secret
+                key: KEYCLOAK_ADMIN_PASSWORD
+          - name: KC_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-secret
+                key: KC_DB_PASSWORD
+          - name: KC_DB
+            value: keycloak-database
+          - name: KC_DB_URL
+            value: jdbc:postgresql://keycloak-postgres:5432/keycloak-database
+          - name: KC_DB_USERNAME
+            value: keycloak-user
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+spec:
+  type: ClusterIP
+  selector:
+    app: keycloak
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak
+  labels:
+    app.kubernetes.io/name: keycloak
+spec:
+  rules:
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/keycloak"
+        backend:
+          service:
+            name: keycloak
+            port: 
+              number: 8080
+
+        
+        
