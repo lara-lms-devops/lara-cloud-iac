@@ -129,7 +129,7 @@ spec:
                 name: keycloak-secrets
                 key: KC_DB_PASSWORD
           - name: KC_DB
-            value: keycloak-database
+            value: postgres
           - name: KC_DB_URL
             value: jdbc:postgresql://keycloak-postgres:5432/keycloak-database
           - name: KC_DB_USERNAME
