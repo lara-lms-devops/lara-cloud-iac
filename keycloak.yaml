@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
         - name: keycloak-postgres
-          image: bitnami/postgresql:16
+          image: bitnami/postgresql:17
           resources:
             limits:
               memory: "256Mi"
@@ -107,7 +107,7 @@ spec:
         command: ['sh', '-c', 'until nc -z keycloak-postgres 5432; do echo waiting for postgres; sleep 2; done;']
       containers:
       - name: keycloak
-        image: quay.io/keycloak/keycloak:24.0.4
+        image: quay.io/keycloak/keycloak:26.3.2
         args: ["start-dev"]
         resources:
           limits:
@@ -134,18 +134,22 @@ spec:
                 key: KC_DB_PASSWORD
           - name: KC_DB
             value: postgres
-          - name: KC_DB_URL
-            value: jdbc:postgresql://keycloak-postgres:5432/keycloak-database
+          # - name: KC_DB_URL
+          #   value: jdbc:postgresql://keycloak-postgres:5432/keycloak-database
+          - name: 'KC_DB_URL_DATABASE'
+            value: 'keycloak-database'
+          - name: 'KC_DB_URL_HOST'
+            value: 'keycloak-postgres'
           - name: KC_DB_USERNAME
             value: keycloak-user
         ports:
         - containerPort: 8080
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8080
-          initialDelaySeconds: 20
-          periodSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health/ready
+        #     port: 8080
+        #   initialDelaySeconds: 20
+        #   periodSeconds: 10
         livenessProbe:
           httpGet:
             path: /health/live
