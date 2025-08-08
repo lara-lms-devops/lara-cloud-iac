@@ -1,0 +1,34 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: lara-dev-tenant # e.g., minio-tenant
+  namespace: lara-dev # e.g., team-a
+spec:
+  image: quay.io/minio/minio:RELEASE.2024-01-16T16-07-38Z
+  replicas: 1
+  pools:
+    - servers: 1
+      volumesPerServer: 1
+      volumeClaimTemplate:
+        metadata:
+          name: data
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi # Udenrstand what should be those parameters
+  mountPath: /export
+  requestAutoCert: true
+  env:
+    - name: MINIO_IDENTITY_OPENID_CONFIG_URL
+      value: "https://<keycloak-domain>/realms/<realm-name>/.well-known/openid-configuration"
+    - name: MINIO_IDENTITY_OPENID_CLIENT_ID
+      value: "<minio-client-id>" # From Keycloak client ID
+    - name: MINIO_IDENTITY_OPENID_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: oidc-secret
+          key: client-secret
+    - name: MINIO_IDENTITY_OPENID_SCOPES
+      value: "openid,profile,email"

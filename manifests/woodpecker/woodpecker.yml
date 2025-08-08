@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: woodpecker-server
+spec:
+  selector:
+    matchLabels:
+      app: woodpecker-server
+  template:
+    metadata:
+      labels:
+        app: woodpecker-server
+    spec:
+      containers:
+      - name: woodpecker-server
+        image: woodpeckerci/woodpecker-server:latest
+        ports: 
+         - containerPort: 8080
+        envFrom: 
+          - secretRef:
+              name: woodpecker-secret
+        env:
+          - name: WOODPECKER_BACKEND
+            value: "github"
+          - name: WOODPECKER_HOST
+            value: "http://woodpecker.default.svc.cluster.local" # or your ingress URL (TODO: add ingress and use cloudflare tunnel to expose this publicly)
+          # - name: WOODPECKER_ADMIN
+          #   value: "<your-github-username>" # optional but useful
+          - name: WOODPECKER_GITHUB
+            value: "true"
+          - name: WOODPECKER_LOG_LEVEL
+            value: "debug"
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "0.5"
+          requests:
+            memory: "512Mi"
+            cpu: "0.2"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: woodpecker
+spec:
+  selector:
+    app: woodpecker-server
+  ports:
+  - port: 80
+    targetPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: woodpecker-agent
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: woodpecker-agent
+  template:
+    metadata:
+      labels:
+        app: woodpecker-agent
+    spec:
+      serviceAccountName: woodpecker
+      containers:
+        - name: agent
+          image: woodpeckerci/woodpecker-agent:latest
+          env:
+            - name: WOODPECKER_SERVER
+              value: "http://woodpecker.default.svc.cluster.local"
+            - name: WOODPECKER_AGENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: woodpecker-secret
+                  key: WOODPECKER_AGENT_SECRET
+            - name: WOODPECKER_LOG_LEVEL
+              value: "debug"
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "0.5"
+            requests:
+              memory: "512Mi"
+              cpu: "0.2"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: woodpecker
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: woodpecker-deployer
+rules:
+  - apiGroups: ["", "apps", "batch", "extensions"]
+    resources: ["pods", "services", "deployments", "replicasets", "jobs", "configmaps", "secrets"]
+    verbs: ["get", "list", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: woodpecker-deployer-binding
+roleRef:
+  kind: ClusterRole
+  name: woodpecker-deployer
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: woodpecker
+    namespace: default
