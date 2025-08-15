@@ -50,6 +50,8 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
+  - port: 9000
+    targetPort: 9000
 
 ---
 apiVersion: apps/v1
@@ -73,7 +75,7 @@ spec:
           image: woodpeckerci/woodpecker-agent:latest
           env:
             - name: WOODPECKER_SERVER
-              value: "http://woodpecker.default.svc.cluster.local"
+              value: "woodpecker.default.svc.cluster.local:9000"
             - name: WOODPECKER_AGENT_SECRET
               valueFrom:
                 secretKeyRef:
