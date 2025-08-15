@@ -6,7 +6,7 @@ spec:
   parentRefs:
   - name: example-gateway
   hostnames:
-  - "www.example.com" # TODO add the host here using the cloudflare tunnel hostname and internal dns
+  - "dev.lara.test.local" # TODO add the host here using the cloudflare tunnel hostname and internal dns
   rules:
   - matches:
     - path:
