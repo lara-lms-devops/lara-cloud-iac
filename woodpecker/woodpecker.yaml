@@ -37,6 +37,25 @@ spec:
           requests:
             memory: "512Mi"
             cpu: "0.2"
+        volumeMounts:
+          - mountPath: /var/lib/woodpecker
+            name: woodpecker-data
+        volumes:
+          - name: woodpecker-data
+            persistentVolumeClaim:
+              claimName: woodpecker-pvc
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: woodpecker-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 
 ---
 
