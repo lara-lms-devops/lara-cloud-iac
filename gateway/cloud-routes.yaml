@@ -6,7 +6,7 @@ spec:
   parentRefs:
   - name: example-gateway
   hostnames:
-  - "cloud.lara.test.local" # TODO add the host here using the cloudflare tunnel hostname and internal dns
+  - "cloud.lara.test.local"
   rules:
   - matches:
     - path:
@@ -18,7 +18,7 @@ spec:
   - matches:
     - path:
         type: PathPrefix
-        value: /auth
+        value: /auth/
     backendRefs:
     - name: keycloak
       port: 80
