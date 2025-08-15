@@ -48,9 +48,11 @@ spec:
   selector:
     app: woodpecker-server
   ports:
-  - port: 80
+  - name: http-ui
+    port: 80
     targetPort: 8080
-  - port: 9000
+  - name: agent-rpc
+    port: 9000
     targetPort: 9000
 
 ---
