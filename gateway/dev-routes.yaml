@@ -4,7 +4,7 @@ metadata:
   name: lara-routes
 spec:
   parentRefs:
-  - name: example-gateway
+  - name: lara-gateway
   hostnames:
   - "dev.lara.test.local" # TODO add the host here using the cloudflare tunnel hostname and internal dns
   rules:

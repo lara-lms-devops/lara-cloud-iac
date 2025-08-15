@@ -1,16 +1,16 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
-  name: example-class
+  name: traefik
 spec:
   controllerName: example.com/gateway-controller
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: example-gateway
+  name: lara-gateway
 spec:
-  gatewayClassName: example-class
+  gatewayClassName: traefik
   listeners:
   - name: http
     protocol: HTTP

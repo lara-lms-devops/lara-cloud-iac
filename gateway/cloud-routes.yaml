@@ -4,7 +4,7 @@ metadata:
   name: cloud-routes
 spec:
   parentRefs:
-  - name: example-gateway
+  - name: lara-gateway
   hostnames:
   - "cloud.lara.test.local"
   rules:
