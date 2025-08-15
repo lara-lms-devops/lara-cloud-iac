@@ -166,26 +166,26 @@ spec:
   selector:
     app: keycloak
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: keycloak
-  labels:
-    app.kubernetes.io/name: keycloak
-spec:
-  rules:
-    - http:
-        paths:
-        - pathType: Prefix
-          path: "/"
-          backend:
-            service:
-              name: keycloak
-              port:
-                number: 8080
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: keycloak
+#   labels:
+#     app.kubernetes.io/name: keycloak
+# spec:
+#   rules:
+#     - http:
+#         paths:
+#         - pathType: Prefix
+#           path: "/"
+#           backend:
+#             service:
+#               name: keycloak
+#               port:
+#                 number: 8080
 
         
         

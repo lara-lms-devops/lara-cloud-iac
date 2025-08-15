@@ -13,4 +13,4 @@ kubectl get all -n minio-operator
 
 # TODO add integration to keycloak with https://docs.min.io/community/minio-object-store/operations/external-iam.html
 # Do this after testing
-kubectl apply -f manifests/minio/tenant/lara-dev-tenant.yaml
+kubectl apply -f lara-dev-tenant.yaml

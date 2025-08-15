@@ -20,5 +20,5 @@ unset GITHUB_CLIENT_ID
 unset GITHUB_SECRET
 
 echo 'Deployando Woodpecker'
-kubectl apply -f manifests/woodpecker/woodpecker.yaml
+kubectl apply -f woodpecker.yaml
 
