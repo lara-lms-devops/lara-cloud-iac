@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: keycloak-postgres-pvc
+  namespace: cloud
 spec:
   resources:
     requests:
@@ -10,10 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
 ---
+# TODO this secret must be created with CLI so the secret is not exposed
 apiVersion: v1
 kind: Secret
 metadata:
   name: keycloak-postgres-secret
+  namespace: cloud
 type: Opaque
 stringData:
   POSTGRESQL_PASSWORD: secret
@@ -22,6 +25,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak-postgres
+  namespace: cloud
 spec:
   replicas: 1
   selector:
@@ -66,6 +70,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: keycloak-postgres
+  namespace: cloud
 spec:
   type: ClusterIP
   selector:
@@ -77,20 +82,22 @@ spec:
 
 
 ---
+# TODO this secret must be created with CLI so the secret is not exposed
 apiVersion: v1
 kind: Secret
 metadata:
   name: keycloak-secrets
+  namespace: cloud
 type: Opaque
 stringData:
   KEYCLOAK_ADMIN: admin
   KEYCLOAK_ADMIN_PASSWORD: admin
-  KC_DB_PASSWORD: secret
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak
+  namespace: cloud
 spec:
   replicas: 1
   selector:
@@ -130,8 +137,8 @@ spec:
           - name: KC_DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: keycloak-secrets
-                key: KC_DB_PASSWORD
+                name: keycloak-postgres-secret
+                key: POSTGRESQL_PASSWORD
           - name: KC_DB
             value: postgres
           # - name: KC_DB_URL
@@ -161,6 +168,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: keycloak
+  namespace: cloud
 spec:
   type: ClusterIP
   selector:
@@ -173,6 +181,7 @@ spec:
 # kind: Ingress
 # metadata:
 #   name: keycloak
+  # namespace: cloud
 #   labels:
 #     app.kubernetes.io/name: keycloak
 # spec:

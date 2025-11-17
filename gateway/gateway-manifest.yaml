@@ -1,17 +1,28 @@
-apiVersion: gateway.networking.k8s.io/v1
-kind: GatewayClass
-metadata:
-  name: traefik
-spec:
-  controllerName: example.com/gateway-controller
----
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: GatewayClass
+# metadata:
+#   name: traefik
+# spec:
+#   controllerName: example.com/gateway-controller
+# ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: lara-gateway
+  namespace: cloud
 spec:
   gatewayClassName: traefik
   listeners:
   - name: http
     protocol: HTTP
-    port: 80
+    port: 8000 # default traefik HTTP port
+  # - name: https # TODO add the TLS support
+  #   protocol: HTTPS
+  #   port: 8443         # Traefik HTTPS default port, adjust as needed
+  #   tls:
+  #     mode: Terminate
+  #     certificateRefs:
+  #       - name: traefik-tls-secret
+  #         namespace: default
+
+# TODO create namespaces

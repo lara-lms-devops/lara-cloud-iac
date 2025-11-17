@@ -6,7 +6,7 @@ spec:
   parentRefs:
   - name: lara-gateway
   hostnames:
-  - "cloud.lara.test.local"
+  - "cloud.lara.local"
   rules:
   - matches:
     - path:

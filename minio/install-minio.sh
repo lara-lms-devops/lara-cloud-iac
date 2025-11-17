@@ -2,7 +2,7 @@ echo 'Adicionando repositorio do minio-operator no helm'
 helm repo add minio-operator https://operator.min.io
 
 echo 'Deployando MinIO usando helm no namespace minio-operator'
-helm install \
+helm KUBECONFIG=/etc/rancher/k3s/k3s.yaml install \
   --namespace minio-operator \
   --create-namespace \
   operator minio-operator/operator
