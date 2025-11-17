@@ -19,13 +19,13 @@ spec:
   - matches:
     - path:
         type: PathPrefix
-        value: /auth/
+        value: /auth
     filters:
       - type: URLRewrite
         urlRewrite:
           path:
-            type: ReplaceFullPath
-            replaceFullPath: "/"
+            type: ReplacePrefixMatch
+            replacePrefixMatch: "/"
     backendRefs:
     - name: keycloak
       port: 80
