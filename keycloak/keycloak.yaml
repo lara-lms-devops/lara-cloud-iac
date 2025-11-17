@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: keycloak-postgres
-          image: bitnami/postgresql:latest
+          image: bitnami/postgresql:latest # TODO define a version for this image
           resources:
             limits:
               memory: "256Mi"
