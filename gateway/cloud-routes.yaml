@@ -24,7 +24,8 @@ spec:
       - type: URLRewrite
         urlRewrite:
           path:
-            replacePrefixMatch: "/"
+            type: ReplaceFullPath
+            replaceFullPath: "/"
     backendRefs:
     - name: keycloak
       port: 80
