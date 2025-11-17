@@ -23,3 +23,9 @@ spec:
     backendRefs:
     - name: keycloak
       port: 80
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+          - type: ReplaceFullPath
+            replaceFullPath: /
