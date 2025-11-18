@@ -7,25 +7,21 @@ spec:
   parentRefs:
   - name: lara-gateway
   hostnames:
-  - "cloud.lara.local"
+  - "auth.cloud.lara.local"
   rules:
   - matches:
     - path:
         type: PathPrefix
-        value: /pipelines
-    backendRefs:
-    - name: woodpecker
-      port: 80
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /auth
-    filters:
-      - type: URLRewrite
-        urlRewrite:
-          path:
-            type: ReplacePrefixMatch
-            replacePrefixMatch: "/"
+        value: /
     backendRefs:
     - name: keycloak
       port: 80
+
+
+  # - matches:
+  #   - path:
+  #       type: PathPrefix
+  #       value: /pipelines
+  #   backendRefs:
+  #   - name: woodpecker
+  #     port: 80
