@@ -13,9 +13,9 @@ metadata:
 spec:
   gatewayClassName: traefik
   listeners:
-  # - name: http
-  #   protocol: HTTP
-  #   port: 8000 # default traefik HTTP port
+  - name: http
+    protocol: HTTP
+    port: 8000 # default traefik HTTP port
   - name: https
     protocol: HTTPS
     port: 8443 # 443
