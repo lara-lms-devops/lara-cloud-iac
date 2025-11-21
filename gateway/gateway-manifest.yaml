@@ -13,9 +13,17 @@ metadata:
 spec:
   gatewayClassName: traefik
   listeners:
-  - name: http
-    protocol: HTTP
-    port: 8000 # default traefik HTTP port
+  # - name: http
+  #   protocol: HTTP
+  #   port: 8000 # default traefik HTTP port
+  - name: https
+    protocol: HTTPS
+    port: 8443 # 443
+    hostname: "*.cloud.lara.local"
+    tls:
+      certificateRefs:
+        - name: cloud-tls
+
   # - name: https # TODO add the TLS support
   #   protocol: HTTPS
   #   port: 8443         # Traefik HTTPS default port, adjust as needed
