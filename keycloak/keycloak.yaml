@@ -149,6 +149,10 @@ spec:
             value: 'keycloak-postgres'
           - name: KC_DB_USERNAME
             value: keycloak-user
+          - name: KC_PROXY
+            value: "edge"
+          - name: KC_HOSTNAME_STRICT_HTTPS
+            value: "true"
         ports:
           - containerPort: 8080
         # readinessProbe:
