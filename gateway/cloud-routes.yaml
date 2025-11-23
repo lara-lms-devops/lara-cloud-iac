@@ -6,6 +6,7 @@ metadata:
 spec:
   parentRefs:
   - name: lara-gateway
+    sectionName: https
   hostnames:
   - "auth.cloud.lara.local"
   rules:
