@@ -18,6 +18,24 @@ spec:
     - name: keycloak
       port: 80
 
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: cloud-http-redirect-route
+  namespace: cloud
+spec:
+  parentRefs:
+  - name: lara-gateway
+    sectionName: http
+  hostnames:
+  - "auth.cloud.lara.local"
+  rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+
 
   # - matches:
   #   - path:
