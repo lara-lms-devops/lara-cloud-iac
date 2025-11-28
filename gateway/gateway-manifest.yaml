@@ -15,10 +15,10 @@ spec:
   listeners:
   - name: http
     protocol: HTTP
-    port: 8000 # default traefik HTTP port
+    port: 80 # default traefik HTTP port
   - name: https
     protocol: HTTPS
-    port: 8443 # 443
+    port: 443 # 443
     hostname: "*.cloud.lara.local"
     tls:
       certificateRefs:
