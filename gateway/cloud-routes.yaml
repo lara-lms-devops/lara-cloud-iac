@@ -31,6 +31,10 @@ spec:
   hostnames:
   - "auth.cloud.lara.local"
   rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
   - filters:
     - type: RequestRedirect
       requestRedirect:
