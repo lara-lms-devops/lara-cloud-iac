@@ -115,7 +115,8 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:26.3.2
-        args: ["start-dev"]
+        args:
+          - "start"
         resources:
           limits:
             memory: "1024Mi"
