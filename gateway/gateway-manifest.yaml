@@ -16,11 +16,11 @@ spec:
   - name: http
     protocol: HTTP
     port: 8000 # default traefik HTTP port
-    hostname: "*.cloud.lara.local"
+    hostname: "*.cloud.bonfimalan.com.br"
   - name: https
     protocol: HTTPS
     port: 8443 # 443
-    hostname: "*.cloud.lara.local"
+    hostname: "*.cloud.bonfimalan.com.br"
     tls:
       certificateRefs:
         - name: cloud-tls
