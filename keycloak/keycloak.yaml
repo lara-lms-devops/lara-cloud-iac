@@ -142,6 +142,8 @@ spec:
                 key: POSTGRESQL_PASSWORD
           - name: KC_DB
             value: postgres
+          - name: KC_HTTP_ENABLED
+            value: "true"
           # - name: KC_DB_URL
           #   value: jdbc:postgresql://keycloak-postgres:5432/keycloak-database
           - name: 'KC_DB_URL_DATABASE'
