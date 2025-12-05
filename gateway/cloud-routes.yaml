@@ -3,6 +3,9 @@ kind: HTTPRoute
 metadata:
   name: cloud-routes
   namespace: cloud
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/forwarded-headers: "true"
 spec:
   parentRefs:
   - name: lara-gateway
