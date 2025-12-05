@@ -24,6 +24,11 @@ spec:
     tls:
       certificateRefs:
         - name: cloud-tls
+          namespace: cloud
+  infrastructure:
+    annotations:
+      traefik.ingress.kubernetes.io/forwarded-headers: "true"
+      traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"
 
   # - name: https # TODO add the TLS support
   #   protocol: HTTPS
