@@ -157,9 +157,11 @@ spec:
           - name: KC_HOSTNAME_STRICT_HTTPS
             value: "true"
           - name: KC_HOSTNAME
-            value: auth.cloud.bonfimalan.com.br
+            value: https://auth.cloud.bonfimalan.com.br
           - name: KC_FRONTEND_URL
             value: https://auth.cloud.bonfimalan.com.br
+          - name: KC_PORXY_HEADERS
+            value: forwarded
         ports:
           - containerPort: 8080
         # readinessProbe:
