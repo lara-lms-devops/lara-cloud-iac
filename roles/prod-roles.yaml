@@ -5,7 +5,13 @@ metadata:
   name: read-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "deployments", "services", "httproutes"]
+  resources: ["pods", "services"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["gateway.networking.k8s.io"]
+  resources: ["httproutes"]
   verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -15,7 +21,13 @@ metadata:
   name: write-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "deployments", "services", "httproutes", "secrets", "persistentvolumeclaims"]
+  resources: ["pods", "services", "secrets", "persistentvolumeclaims",]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["gateway.networking.k8s.io"]
+  resources: ["httproutes"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 ---
 
