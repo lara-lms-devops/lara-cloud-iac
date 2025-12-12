@@ -1,0 +1,48 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: lara-production
+  name: read-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "deployments", "services", "httproutes"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: lara-production
+  name: write-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "deployments", "services", "httproutes", "secrets", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-role-bindind
+  namespace: lara-production
+subjects:
+- kind: Group
+  name: "group:prod-lara-developer"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: read-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: write-role-bindind
+  namespace: lara-production
+subjects:
+- kind: Group
+  name: "group:prod-lara-deployer"
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: write-role
+  apiGroup: rbac.authorization.k8s.io

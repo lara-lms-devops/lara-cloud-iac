@@ -1,10 +1,3 @@
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: GatewayClass
-# metadata:
-#   name: traefik
-# spec:
-#   controllerName: example.com/gateway-controller
-# ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -29,14 +22,53 @@ spec:
     annotations:
       traefik.ingress.kubernetes.io/forwarded-headers: "true"
       traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"
-
-  # - name: https # TODO add the TLS support
-  #   protocol: HTTPS
-  #   port: 8443         # Traefik HTTPS default port, adjust as needed
-  #   tls:
-  #     mode: Terminate
-  #     certificateRefs:
-  #       - name: traefik-tls-secret
-  #         namespace: default
-
-# TODO create namespaces
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: lara-gateway
+  namespace: lara-production
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 8000
+    hostname: "*.lara.bonfimalan.com.br"
+  - name: https
+    protocol: HTTPS
+    port: 8443
+    hostname: "*.lara.bonfimalan.com.br"
+    tls:
+      certificateRefs:
+        - name: lara-prod-tls
+          namespace: lara-production
+  infrastructure:
+    annotations:
+      traefik.ingress.kubernetes.io/forwarded-headers: "true"
+      traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: lara-dev-gateway
+  namespace: lara-development
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 8000
+    hostname: "*.lara-dev.bonfimalan.com.br"
+  - name: https
+    protocol: HTTPS
+    port: 8443
+    hostname: "*.lara-dev.bonfimalan.com.br"
+    tls:
+      certificateRefs:
+        - name: lara-dev-tls
+          namespace: lara-development
+  infrastructure:
+    annotations:
+      traefik.ingress.kubernetes.io/forwarded-headers: "true"
+      traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"

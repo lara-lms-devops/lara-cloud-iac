@@ -4,7 +4,7 @@ metadata:
   name: cluster-admins-role
 rules:
   - apiGroups: [""]
-    resources: ["pods", "services"]
+    resources: ["pods", "deployments", "services", "httproutes", "secrets", "persistentvolumeclaims", "gateways"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 
 ---
@@ -14,7 +14,7 @@ metadata:
   name: cluster-admins-binding
 subjects:
   - kind: Group
-    name: cluster-admins
+    name: "group:cluster-admin" # keycloak user group name
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
