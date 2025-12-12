@@ -14,7 +14,7 @@ metadata:
   name: cluster-admins-binding
 subjects:
   - kind: Group
-    name: cluster-admin # keycloak user group name
+    name: cluster-super-admin # keycloak user group name
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
