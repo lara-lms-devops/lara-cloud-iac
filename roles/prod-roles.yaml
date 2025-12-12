@@ -26,7 +26,7 @@ metadata:
   namespace: lara-production
 subjects:
 - kind: Group
-  name: "group:prod-lara-developer"
+  name: prod-lara-developer
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
@@ -40,7 +40,7 @@ metadata:
   namespace: lara-production
 subjects:
 - kind: Group
-  name: "group:prod-lara-deployer"
+  name: prod-lara-deployer
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
