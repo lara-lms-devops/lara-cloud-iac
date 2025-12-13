@@ -4,13 +4,16 @@ metadata:
   name: cluster-admins-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "services", "secrets", "persistentvolumeclaims",]
+  resources: ["pods", "pods/log", "services", "secrets", "persistentvolumeclaims",]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["apps"]
   resources: ["deployments"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["gateway.networking.k8s.io"]
   resources: ["httproutes", "gateways"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterrole", "clusterrolebinding", "role", "rolebinding"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 
 ---

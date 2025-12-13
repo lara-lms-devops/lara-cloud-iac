@@ -5,7 +5,7 @@ metadata:
   name: read-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "services"]
+  resources: ["pods", "pods/log", "services"]
   verbs: ["get", "watch", "list"]
 - apiGroups: ["apps"]
   resources: ["deployments"]
@@ -21,7 +21,7 @@ metadata:
   name: write-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "services", "secrets", "persistentvolumeclaims",]
+  resources: ["pods", "pods/log", "services", "secrets", "persistentvolumeclaims",]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["apps"]
   resources: ["deployments"]
