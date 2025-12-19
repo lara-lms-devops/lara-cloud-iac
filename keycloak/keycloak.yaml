@@ -1,3 +1,4 @@
+# Keycloak database
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -10,16 +11,6 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
----
-# TODO this secret must be created with CLI so the secret is not exposed
-apiVersion: v1
-kind: Secret
-metadata:
-  name: keycloak-postgres-secret
-  namespace: cloud
-type: Opaque
-stringData:
-  POSTGRESQL_PASSWORD: secret
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -79,19 +70,7 @@ spec:
   - port: 5432
     targetPort: 5432
 
-
-
----
-# TODO this secret must be created with CLI so the secret is not exposed
-apiVersion: v1
-kind: Secret
-metadata:
-  name: keycloak-secrets
-  namespace: cloud
-type: Opaque
-stringData:
-  KEYCLOAK_ADMIN: admin
-  KEYCLOAK_ADMIN_PASSWORD: admin
+# Keycloak
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -144,8 +123,6 @@ spec:
             value: postgres
           - name: KC_HTTP_ENABLED
             value: "true"
-          # - name: KC_DB_URL
-          #   value: jdbc:postgresql://keycloak-postgres:5432/keycloak-database
           - name: 'KC_DB_URL_DATABASE'
             value: 'keycloak-database'
           - name: 'KC_DB_URL_HOST'
@@ -164,18 +141,6 @@ spec:
             value: forwarded
         ports:
           - containerPort: 8080
-        # readinessProbe:
-        #   httpGet:
-        #     path: /health/ready
-        #     port: 8080
-        #   initialDelaySeconds: 20
-        #   periodSeconds: 10
-        # livenessProbe:
-        #   httpGet:
-        #     path: /health/live
-        #     port: 8080
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
@@ -189,25 +154,3 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: keycloak
-  # namespace: cloud
-#   labels:
-#     app.kubernetes.io/name: keycloak
-# spec:
-#   rules:
-#     - http:
-#         paths:
-#         - pathType: Prefix
-#           path: "/"
-#           backend:
-#             service:
-#               name: keycloak
-#               port:
-#                 number: 8080
-
-        
-        
