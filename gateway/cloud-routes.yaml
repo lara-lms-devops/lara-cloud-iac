@@ -20,7 +20,6 @@ spec:
     backendRefs:
     - name: keycloak
       port: 80
-# TODO update the route names
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -42,12 +41,3 @@ spec:
       - type: RequestRedirect
         requestRedirect:
           scheme: https
-
-
-  # - matches:
-  #   - path:
-  #       type: PathPrefix
-  #       value: /pipelines
-  #   backendRefs:
-  #   - name: woodpecker
-  #     port: 80
