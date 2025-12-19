@@ -1,3 +1,0 @@
-# Run the bellow command before activing the python environment
-
-Set-ExecutionPolicy Unrestricted -Scope Process
