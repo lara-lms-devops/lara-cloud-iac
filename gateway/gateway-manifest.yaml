@@ -1,0 +1,74 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: lara-gateway
+  namespace: cloud
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 8000 # default traefik HTTP port
+    hostname: "*.cloud.bonfimalan.com.br"
+  - name: https
+    protocol: HTTPS
+    port: 8443 # 443
+    hostname: "*.cloud.bonfimalan.com.br"
+    tls:
+      certificateRefs:
+        - name: cloud-tls
+          namespace: cloud
+  infrastructure:
+    annotations:
+      traefik.ingress.kubernetes.io/forwarded-headers: "true"
+      traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: lara-gateway
+  namespace: lara-production
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 8000
+    hostname: "*.lara.bonfimalan.com.br"
+  - name: https
+    protocol: HTTPS
+    port: 8443
+    hostname: "*.lara.bonfimalan.com.br"
+    tls:
+      certificateRefs:
+        - name: lara-prod-tls
+          namespace: lara-production
+  infrastructure:
+    annotations:
+      traefik.ingress.kubernetes.io/forwarded-headers: "true"
+      traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: lara-dev-gateway
+  namespace: lara-development
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 8000
+    hostname: "*.lara-dev.bonfimalan.com.br"
+  - name: https
+    protocol: HTTPS
+    port: 8443
+    hostname: "*.lara-dev.bonfimalan.com.br"
+    tls:
+      certificateRefs:
+        - name: lara-dev-tls
+          namespace: lara-development
+  infrastructure:
+    annotations:
+      traefik.ingress.kubernetes.io/forwarded-headers: "true"
+      traefik.ingress.kubernetes.io/enable-forwarded-headers: "true"

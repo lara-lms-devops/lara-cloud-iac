@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloud
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lara-development
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lara-production
