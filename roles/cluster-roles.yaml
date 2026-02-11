@@ -7,7 +7,7 @@ rules:
   resources: ["pods", "pods/log", "services", "secrets", "persistentvolumeclaims",]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["apps"]
-  resources: ["deployments"]
+  resources: ["deployments", "statefulsets"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["gateway.networking.k8s.io"]
   resources: ["httproutes", "gateways"]
