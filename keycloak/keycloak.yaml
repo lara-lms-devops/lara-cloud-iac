@@ -1,24 +1,98 @@
 # Keycloak database
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: keycloak-postgres-pvc
+#   namespace: cloud
+# spec:
+#   resources:
+#     requests:
+#       storage: 8Gi
+#   volumeMode: Filesystem
+#   accessModes:
+#     - ReadWriteOnce
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: keycloak-postgres
+#   namespace: cloud
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: keycloak-postgres
+#   template:
+#     metadata:
+#       labels:
+#         app: keycloak-postgres
+#     spec:
+#       containers:
+#         - name: keycloak-postgres
+#           image: bitnami/postgresql:latest # TODO define a version for this image
+#           resources:
+#             limits:
+#               memory: "256Mi"
+#               cpu: "0.5"
+#             requests:
+#               memory: "128Mi"
+#               cpu: "0.2"
+#           ports:
+#             - containerPort: 5432
+#           env:
+#             - name: POSTGRESQL_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: keycloak-postgres-secret
+#                   key: POSTGRESQL_PASSWORD
+#             - name: POSTGRESQL_USERNAME
+#               value: keycloak-user
+#             - name: POSTGRESQL_DATABASE
+#               value: keycloak-database
+#           volumeMounts:
+#             - name: keycloak-postgres-storage
+#               mountPath: /bitnami/postgresql
+#       volumes:
+#         - name: keycloak-postgres-storage
+#           persistentVolumeClaim:
+#             claimName: keycloak-postgres-pvc
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: keycloak-postgres
+#   namespace: cloud
+# spec:
+#   type: ClusterIP
+#   selector:
+#     app: keycloak-postgres
+#   ports:
+#   - port: 5432
+#     targetPort: 5432
+# ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: Service
 metadata:
-  name: keycloak-postgres-pvc
+  name: keycloak-postgres
   namespace: cloud
+  labels:
+    app: keycloak-postgres
 spec:
-  resources:
-    requests:
-      storage: 8Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
+  clusterIP: None
+  selector:
+    app: keycloak-postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: keycloak-postgres
   namespace: cloud
 spec:
   replicas: 1
+  serviceName: "keycloak-postgres"
   selector:
     matchLabels:
       app: keycloak-postgres
@@ -52,24 +126,14 @@ spec:
           volumeMounts:
             - name: keycloak-postgres-storage
               mountPath: /bitnami/postgresql
-      volumes:
-        - name: keycloak-postgres-storage
-          persistentVolumeClaim:
-            claimName: keycloak-postgres-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: keycloak-postgres
-  namespace: cloud
-spec:
-  type: ClusterIP
-  selector:
-    app: keycloak-postgres
-  ports:
-  - port: 5432
-    targetPort: 5432
-
+  volumeClaimTemplates:
+    - metadata:
+        name: keycloak-postgres-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 8Gi
 # Keycloak
 ---
 apiVersion: apps/v1
